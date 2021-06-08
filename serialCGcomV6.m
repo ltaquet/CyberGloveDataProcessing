@@ -44,7 +44,6 @@ sensors = [sensors; sensors_full];
 isRunning = true;
 
 %Checks directories for patient
-%PID = input("Patient ID: ",'s');
 curr_dir = pwd;
 cd ../../Patients
 patients = dir();

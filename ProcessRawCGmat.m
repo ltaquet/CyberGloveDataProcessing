@@ -1,30 +1,67 @@
  clear; clc;
- 
- PID = input("Patient ID: ",'s');
- filetype = strcat(PID,'_raw_','*.mat');
- unprocessed_files = dir(filetype);
- allTasks = input("List task names deliminated by commas (i.e task1, task2, task3): ",'s');
- task_names = split(allTasks,', ');
+
+%Set current directory as location of this script
+cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+
+%Checks directories for patient
+curr_dir = pwd;
+cd ../../Patients
+patients = dir();
+patients = patients(3:end);
+patients = struct2cell(patients);
+patients = patients(1,:);
+patients{end+1} = 'New Patient';
+PID = listdlg('Name','Patient ID?', 'PromptString','Patient ID?','ListString',patients,...
+    'SelectionMode','single',...
+    'ListSize',[200 100]);
+if isempty(PID)
+    fprintf("Aborted\n");
+    return
+end
+PID = patients{PID};
+
+if PID == "New Patient"
+    fprintf("Run newPatient.m to create directory for new patient\n");
+    return
+end
+
+cd(PID);
+
+cd cal
+load(strcat(PID,'_cal.mat'));
+cd ../'Uncalibrated Data'
+
+filetype = strcat(PID,'_raw_','*.mat');
+unprocessed_files = dir(filetype);
+fprintf("There are ");
+fprintf(num2str(length(unprocessed_files)));
+fprintf(" file(s) of unprocessed data\n");
+
+allTasks = input("List task names deliminated by a comma and a space (i.e task1, task2, task3): ",'s');
+task_names = split(allTasks,', ');
+
+if length(task_names) ~= length(unprocessed_files)
+   fprintf("Given number of task names does not equal the ");
+   fprintf(num2str(length(unprocessed_files)));
+   fprintf(" file(s) of unprocessed data\n");
+   fprintf("CHECK THAT YOU LISTED TASKS WITH BOTH A COMMA THEN A SPACE (i.e task1, task2, task3)\n");
+   cd(curr_dir)
+   return 
+end
 
  for index = 1:1:length(unprocessed_files)
      
-     load(unprocessed_files(index).name);
- 
-     load('Leon_T_right_cal.mat');
+     load(unprocessed_files(index).name); 
 
      [angles,angles_deg,angles_f,angles_deg_f] = calibrateCGdata(rawData,offsets,gains,90);
-
-     load('Leon_T_right_auto_cal.mat');
-
-     [angles_auto,angles_deg_auto,angles_f_auto,angles_deg_f_auto] = calibrateCGdata(rawData,offsets,gains,90);
- 
-     save(strcat(task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f',...
-          'angles_auto', 'angles_deg_auto','angles_f_auto','angles_deg_f_auto');
+     
+     cd ../'Calibrated Data'
+  
+     save(strcat(PID,'_',task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f');
+     
+     cd ../'Uncalibrated Data'
       
  end
-  
-%  f = msgbox('Select CG III raw MAT file');
-%  uiwait(f);
-%  filetype = strcat(PID,'_raw_','*.mat');
-%  [file2,path2] = uigetfile('*.mat');
-%  load(file2);
+ 
+cd(curr_dir);
+ 
