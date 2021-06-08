@@ -46,10 +46,9 @@ curr_dir = pwd;
 cd ../../patients
 
 if ~exist(PID, 'dir')
-    error("Patient does not exist. Run newPatient.m to create");
+    error("Patient does not exist. Run newPa");
 end
 
-cd(curr_dir);
 
 while isRunning
     mode = questdlg('Acquisition Mode?', ...
