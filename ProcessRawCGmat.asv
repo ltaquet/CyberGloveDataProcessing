@@ -40,7 +40,7 @@ fprintf(" file(s) of unprocessed data\n");
 allTasks = input("List task names deliminated by a comma and a space (i.e task1, task2, task3): ",'s');
 task_names = split(allTasks,', ');
 trial_name = input("Overal Trial Name: ",'s');
-mkdir(strcat(trial_name,'_raw'));
+mkdir(strcat(trial_name,'_raw'
 
 if length(task_names) ~= length(unprocessed_files)
    fprintf("Given number of task names does not equal the ");
@@ -54,7 +54,6 @@ end
  for index = 1:1:length(unprocessed_files)
      
      load(unprocessed_files(index).name); 
-     movefile(unprocessed_files(index).name,strcat(trial_name,'_raw'));
      
      here = pwd;
      cd(curr_dir);
@@ -62,14 +61,11 @@ end
      cd(here);
      
      cd ../'Calibrated Data'
-     if ~exist(trial_name,'dir')
-        mkdir(trial_name);
-     end
-     cd(trial_name);
+     
   
      save(strcat(PID,'_',task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f');
      
-     cd ../../'Uncalibrated Data'
+     cd ../'Uncalibrated Data'
       
  end
  
