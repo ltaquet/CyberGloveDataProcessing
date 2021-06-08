@@ -6,7 +6,7 @@ cd ../../patients
 if ~exist(PID, 'dir')
     mkdir(PID);
     cd(PID)
-    mkdir('Binary Data');
+    mkdir('Raw Data');
     mkdir('cal');
     mkdir('Calibrated Data');
     mkdir('Uncalibrated Data');

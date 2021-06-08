@@ -41,12 +41,23 @@ sensors = [sensors; sensors_full];
 isRunning = true;
 
 %Checks directories for patient
-PID = input("Patient ID: ",'s');
+%PID = input("Patient ID: ",'s');
 curr_dir = pwd;
-cd ../../patients
+cd ../../Patients
+patients = dir();
+patients = patients(3:end);
+patients = struct2cell(patients);
+patients = patients(1,:);
+patients{end+1} = 'New Patient';
+PID = listdlg('Name','Patient ID?', 'PromptString','Patient ID?','ListString',patients,...
+    'SelectionMode','single',...
+    'ListSize',[200 100]);
+cd(curr_dir);
+PID = pa
 
-if ~exist(PID, 'dir')
-    error("Patient does not exist. Run newPa");
+if PID == 'New Patient'
+    fprintf("Run newPatient.m to create\n");
+    return
 end
 
 

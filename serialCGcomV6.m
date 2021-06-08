@@ -18,6 +18,9 @@
 
 clc; clear
 
+%Set current directory as location of this script
+cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+
 %Connects to CyberGlove
 s = serialport("COM6", 115200);
 s.Parity = 'none';
@@ -41,15 +44,29 @@ sensors = [sensors; sensors_full];
 isRunning = true;
 
 %Checks directories for patient
-PID = input("Patient ID: ",'s');
+%PID = input("Patient ID: ",'s');
 curr_dir = pwd;
-cd ../../patients
+cd ../../Patients
+patients = dir();
+patients = patients(3:end);
+patients = struct2cell(patients);
+patients = patients(1,:);
+patients{end+1} = 'New Patient';
+PID = listdlg('Name','Patient ID?', 'PromptString','Patient ID?','ListString',patients,...
+    'SelectionMode','single',...
+    'ListSize',[200 100]);
+cd(curr_dir);
+if isempty(PID)
+    fprintf("Aborted\n");
+    return
+end
+PID = patients{PID};
 
-if ~exist(PID, 'dir')
-    error("Patient does not exist. Run newPatient.m to create");
+if PID == "New Patient"
+    fprintf("Run newPatient.m to create directory for new patient\n");
+    return
 end
 
-cd(curr_dir);
 
 while isRunning
     mode = questdlg('Acquisition Mode?', ...
