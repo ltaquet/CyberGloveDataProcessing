@@ -52,8 +52,11 @@ end
  for index = 1:1:length(unprocessed_files)
      
      load(unprocessed_files(index).name); 
-
+     
+     here = pwd;
+     cd(curr_dir);
      [angles,angles_deg,angles_f,angles_deg_f] = calibrateCGdata(rawData,offsets,gains,90);
+     cd(here);
      
      cd ../'Calibrated Data'
   
