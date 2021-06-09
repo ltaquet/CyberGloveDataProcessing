@@ -1,5 +1,6 @@
  clear; clc;
-
+ 
+ 
 %Set current directory as location of this script
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
 
