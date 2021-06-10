@@ -56,8 +56,8 @@ while MARKorEND ~= "End"
            read(s,2,'char')  
         end
         
-        rawData = zeros(sample_rate*floor(task_time),22,'int16'); %TEST%
-        dataRow = zeros(1,22);
+        rawData = zeros(sample_rate*floor(task_time),23,'int16'); %TEST%
+        dataRow = zeros(1,23);
 
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
@@ -70,12 +70,18 @@ while MARKorEND ~= "End"
               time = read(s,17,'char')
            end
            
-           for index = 1:1:22
+           for index = 1:1:23
                 
+               if index ~= 7
                 %Refer to CyberGlove3.cpp for bitwise math when calculating raw
                 %sensor values from binary CG sd card file
                 
                 sample = bitshift(read(s,1,'uint8'),8,'uint16') + read(s,1,'uint8');
+               else
+                   
+                   sample = 0;
+               end
+                
                 
                 dataRow(1,index) = sample;
                 

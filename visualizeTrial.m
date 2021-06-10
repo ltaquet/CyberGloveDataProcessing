@@ -90,11 +90,11 @@ write(s,"!!!",'string');
 
 
 rawData = int16.empty;
-dataRow = zeros(1,22);
+dataRow = zeros(1,23);
 firstPass = true;
 
 while s.NumBytesAvailable >= 48
-    %There are 22 sensors with 2 bytes of data and 12 significant bits
+    %There are 23 sensors with 2 bytes of data and 12 significant bits
     if firstPass
         time = read(s,16,'char')
         firstPass = false;
@@ -102,15 +102,22 @@ while s.NumBytesAvailable >= 48
         time = read(s,17 ,'char')
     end
 
-    for index = 1:1:22
-
-        %Refer to CyberGlove3.cpp for bitwise math when calculating raw
-        %sensor values from binary CG sd card file
-        sample = bitshift(read(s,1,'uint8'),8,'uint16') + read(s,1,'uint8');
-
-        dataRow(1,index) = sample;
-
-    end
+    for index = 1:1:23
+                
+               if index ~= 7
+                %Refer to CyberGlove3.cpp for bitwise math when calculating raw
+                %sensor values from binary CG sd card file
+                
+                sample = bitshift(read(s,1,'uint8'),8,'uint16') + read(s,1,'uint8');
+               else
+                   
+                   sample = 0;
+               end
+                
+                
+                dataRow(1,index) = sample;
+                
+            end
 
     rawData = [rawData; dataRow];
 
@@ -140,8 +147,8 @@ cd(curr_dir);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CALIBRATE RAW GLOVE DATA %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-calData = zeros(length(rawData),22);
-for i = 1:1:22
+calData = zeros(length(rawData),23);
+for i = 1:1:23
     calData(:,i) = (double(bitshift(rawData(:,i),-4)) - offsets(i))*-gains(i);
 end
 
@@ -211,7 +218,7 @@ while length(labelMat) ~= length(angles)
 end
 
 % Adds zeros for wrist abduction/wrist yaw
-txtData = [labelMat angles zeros(length(angles),1)];
+txtData = [labelMat angles];
 
 fprintf(txtID,'%u %2.2u %2.2u %2.2u %2.2u %08.5f %u %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f\n',transpose(txtData));
 

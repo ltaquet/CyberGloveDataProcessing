@@ -6,8 +6,8 @@ if nargin <= 3
     sample_rate = 100;
 end
 
-calData = zeros(length(rawData),22);
-        for i = 1:1:22
+calData = zeros(length(rawData),23);
+        for i = 1:1:23
             calData(:,i) = (double(bitshift(rawData(:,i),-4)) - offsets(i))*-gains(i);
         end
         
