@@ -72,7 +72,7 @@ while MARKorEND ~= "End"
         
         num_stamps = num_stamps + 1;
         timestamps(num_stamps) = time_stamped;
-        if num_stamps == 1
+        if firstPass
            read(s,2,'char')  
         end
         
@@ -124,11 +124,16 @@ while MARKorEND ~= "End"
             
             %rawData = [rawData; dataRow];
             rawData(sampleCount,:) = dataRow;
-            data_time(sampleCount) = timestamp1;
+            
+            [~, fullTS] = retrieve_CGtimestamp(time);
+            data_time(sampleCount) = fullTS;
             
             sampleCount = sampleCount + 1;
 
         end
+        
+        rawData = rawData(1:(sampleCount-1),:);
+        data_time = data_time(1:(sampleCount-1));
         
         backup = strcat(PID, "_raw_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')),'.mat');
         
