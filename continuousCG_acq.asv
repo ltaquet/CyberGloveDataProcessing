@@ -63,7 +63,9 @@ while MARKorEND ~= "End"
 
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
-        for i = 1:1:(sample_rate*floor(task_time))
+        timestamp1 = '0';
+        while ~strcmp(timestamp1, time_stamped)
+        %for i = 1:1:(sample_rate*floor(task_time))
            if firstPass
 %               hang = read(s,3,'char')
               time = read(s,14,'char');
