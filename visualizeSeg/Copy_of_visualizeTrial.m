@@ -11,6 +11,7 @@ clc; clear
 
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg')
 curr_dir = pwd;
+addpath(curr_dir);
 
 %Choose Patient
 cd ../../../Patients
@@ -47,39 +48,53 @@ cd(trialPath);
 
 
 
-%Loads angles and crop to wanted window
-f = msgbox('Select CG III Trial File');
-uiwait(f);
-[file2,path2] = uigetfile('*.mat');
-load(file2)
-
+% %Loads angles and crop to wanted window
+% f = msgbox('Select CG III Trial File');
+% uiwait(f);
+% [file2,path2] = uigetfile('*.mat');
+% load(file2)
+% 
 %Ask for time window
+
+
+trialDir = dir('*.mat');
+[taskIndex] = choseTaskBasedOnTime(trialPath);
+
+load(trialDir(taskIndex).name);
+
 fprintf("This task was from ");
 fprintf(data_time(1));
 fprintf(" until ");
 fprintf(data_time(end));
 fprintf(".\n");
 
+
 startTime = input("Start time of movement (HH:MM:SS.MS): ",'s');
 endTime = input("End time of movement (HH:MM:SS.MS): ",'s');
 
-if isempty(startTime)
+if isempty(startTime) 
     return
 end
+
+
 
 cd(curr_dir)
 
-[startInd,endInd] = extractTimeWindowCG(data_time,startTime,endTime);
-startInd = startInd + 75;
-endInd = endInd + 75;
-if startInd >= length(angles) || endInd >= length(angles)
-    fprintf("Out of bounds");
-    return
+if ~strcmp(startTime , 'all')
+
+    [startInd,endInd] = extractTimeWindowCG(data_time,startTime,endTime);
+
+    startInd = startInd + 75;
+    endInd = endInd + 75;
+
+    if startInd >= length(angles) || endInd >= length(angles)
+        fprintf("Out of bounds");
+        return
+    end
+
+    angles = angles(startInd:endInd,:);
+
 end
-
-angles = angles(startInd:endInd,:);
-
-
 
 
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg\data')
