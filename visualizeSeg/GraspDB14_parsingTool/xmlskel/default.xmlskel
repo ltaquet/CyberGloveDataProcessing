@@ -1,0 +1,289 @@
+<!-- 
+ # skeleton xml file (.xmlskel)
+ #
+ 0    1         root 5 [2,6,11,16,21]
+ 1  #  2      th-tmc 1 [3]
+ 2  ##  3     th-mcp 1 [4]
+ 3  ###  4     th-ip 1 [5]
+ 4  ####  5   th-tip 0 []
+ 1  #  6      if-cmc 1 [7]
+ 2  ##  7     if-mcp 1 [8]
+ 3  ###  8    if-pip 1 [9]
+ 4  ####  9   if-dip 1 [10]
+ 5  ##### 10  if-tip 0 []
+ 1  # 11      mf-cmc 1 [12]
+ 2  ## 12     mf-mcp 1 [13]
+ 3  ### 13    mf-pip 1 [14]
+ 4  #### 14   mf-dip 1 [15]
+ 5  ##### 15  mf-tip 0 []
+ 1  # 16      rf-cmc 1 [17]
+ 2  ## 17     rf-mcp 1 [18]
+ 3  ### 18    rf-pip 1 [19]
+ 4  #### 19   rf-dip 1 [20]
+ 5  ##### 20  rf-tip 0 []
+ 1  # 21      lf-cmc 1 [22]
+ 2  ## 22     lf-mcp 1 [23]
+ 3  ### 23    lf-pip 1 [24]
+ 4  #### 24   lf-dip 1 [25]
+ 5  ##### 25  lf-tip 0 []
+-->
+<skeleton>
+  <units>
+  <angle>deg</angle>
+  <length>mm</length>
+  </units>
+  <joint>
+    <name>root</name>
+    <id>1</id>
+    <position>0 0 0</position>
+    <limits>
+      <rotx>-180 180</rotx>
+      <roty>-180 180</roty>
+      <rotz>-180 180</rotz>
+    </limits>
+    <!-- start thumb -->
+    <joint>
+      <name>th-tmc</name>
+      <id>2</id>
+      <position>27 -31 0 </position>
+      <limits>
+        <rotx>-25 35</rotx><!--flexion/extension-->
+        <roty>0 0</roty>
+        <rotz>-30 60</rotz><!--adduction/abduction-->
+      </limits>
+      <joint>
+        <name>th-mcp</name>
+        <id>3</id>
+        <position>51 -71 0 </position>
+        <limits>
+          <rotx>-10 80</rotx>
+          <roty>0 0</roty>
+          <rotz>-30 60</rotz>
+        </limits>
+        <joint>
+          <name>th-ip</name>
+          <id>4</id>
+          <position>67 -98 0 </position>
+          <limits>
+            <rotx>-15 80</rotx>
+            <roty>0 0</roty>
+            <rotz>0 0</rotz>
+          </limits>
+          <joint>
+            <name>th-tip</name>
+            <id>5</id>
+            <position>81 -121 0 </position>
+            <limits>
+              <rotx>0 0</rotx>
+              <roty>0 0</roty>
+              <rotz>0 0</rotz>
+            </limits>
+          </joint>
+        </joint>
+      </joint>
+    </joint> <!-- end thumb -->
+    <!-- start index finger -->
+    <joint>
+      <name>if-cmc</name>
+      <id>6</id>
+      <position>14 -35 0 </position>
+      <limits>
+        <rotx>0 0</rotx>
+        <roty>0 0</roty>
+        <rotz>0 0</rotz>
+      </limits>
+      <joint>
+        <name>if-mcp</name>
+        <id>7</id>
+        <position>22 -105 0 </position>
+        <limits>
+          <rotx>0 90</rotx>
+          <roty>0 0</roty>
+          <rotz>-15 42</rotz>
+        </limits>
+        <joint>
+          <name>if-pip</name>
+          <id>8</id>
+          <position>27 -145 0 </position>
+          <limits>
+            <rotx>0 100</rotx>
+            <roty>0 0</roty>
+            <rotz>0 0</rotz>
+          </limits>
+          <joint>
+            <name>if-dip</name>
+            <id>9</id>
+            <position>30 -167 0 </position>
+            <limits>
+              <rotx>-10 90</rotx>
+              <roty>0 0</roty>
+              <rotz>0 0</rotz>
+            </limits>
+            <joint>
+              <name>if-tip</name>
+              <id>10</id>
+              <position>33 -187 0 </position>
+              <limits>
+                <rotx>0 0</rotx>
+                <roty>0 0</roty>
+                <rotz>0 0</rotz>
+              </limits>
+            </joint>
+          </joint>
+        </joint>
+      </joint>
+    </joint> <!-- end index finger -->
+    <!-- start middle finger -->
+    <joint>
+      <name>mf-cmc</name>
+      <id>11</id>
+      <position>0 -37 0 </position>
+      <limits>
+        <rotx>0 0</rotx>
+        <roty>0 0</roty>
+        <rotz>0 0</rotz>
+      </limits>
+      <joint>
+        <name>mf-mcp</name>
+        <id>12</id>
+        <position>0 -104 0 </position>
+        <limits>
+          <rotx>0 90</rotx>
+          <roty>0 0</roty>
+          <rotz>-8 35</rotz>
+        </limits>
+        <joint>
+          <name>mf-pip</name>
+          <id>13</id>
+          <position>0 -151 0 </position>
+          <limits>
+            <rotx>0 100</rotx>
+            <roty>0 0</roty>
+            <rotz>0 0</rotz>
+          </limits>
+          <joint>
+            <name>mf-dip</name>
+            <id>14</id>
+            <position>0 -179 0 </position>
+            <limits>
+              <rotx>-10 90</rotx>
+              <roty>0 0</roty>
+              <rotz>0 0</rotz>
+            </limits>
+            <joint>
+              <name>mf-tip</name>
+              <id>15</id>
+              <position>0 -200 0 </position>
+              <limits>
+                <rotx>0 0</rotx>
+                <roty>0 0</roty>
+                <rotz>0 0</rotz>
+              </limits>
+            </joint>
+          </joint>
+        </joint>
+      </joint>
+    </joint> <!-- end middle finger -->
+    <!-- start ring finger -->
+    <joint>
+      <name>rf-cmc</name>
+      <id>16</id>
+      <position>-11 -36 0 </position>
+      <limits>
+        <rotx>0 0</rotx>
+        <roty>0 15</roty>
+        <rotz>0 0</rotz>
+      </limits>
+      <joint>
+        <name>rf-mcp</name>
+        <id>17</id>
+        <position>-18 -97 0 </position>
+        <limits>
+          <rotx>0 90</rotx>
+          <roty>0 0</roty>
+          <rotz>-20 14</rotz>
+        </limits>
+        <joint>
+          <name>rf-pip</name>
+          <id>18</id>
+          <position>-23 -140 0 </position>
+          <limits>
+            <rotx>0 100</rotx>
+            <roty>0 0</roty>
+            <rotz>0 0</rotz>
+          </limits>
+          <joint>
+            <name>rf-dip</name>
+            <id>19</id>
+            <position>-26 -166 0 </position>
+            <limits>
+              <rotx>-20 90</rotx>
+              <roty>0 0</roty>
+              <rotz>0 0</rotz>
+            </limits>
+            <joint>
+              <name>rf-tip</name>
+              <id>20</id>
+              <position>-28 -189 0 </position>
+              <limits>
+                <rotx>0 0</rotx>
+                <roty>0 0</roty>
+                <rotz>0 0</rotz>
+              </limits>
+            </joint>
+          </joint>
+        </joint>
+      </joint>
+    </joint> <!-- end ring finger -->
+    <!-- start little finger -->
+    <joint>
+      <name>lf-cmc</name>
+      <id>21</id>
+      <position>-18 -32 0 </position>
+      <limits>
+        <rotx>0 0</rotx>
+        <roty>0 30</roty>
+        <rotz>0 0</rotz>
+      </limits>
+      <joint>
+        <name>lf-mcp</name>
+        <id>22</id>
+        <position>-33 -86 0 </position>
+        <limits>
+          <rotx>0 90</rotx>
+          <roty>0 0</roty>
+          <rotz>-40 19</rotz>
+        </limits>
+        <joint>
+          <name>lf-pip</name>
+          <id>23</id>
+          <position>-42 -119 0 </position>
+          <limits>
+            <rotx>0 100</rotx>
+            <roty>0 0</roty>
+            <rotz>0 0</rotz>
+          </limits>
+          <joint>
+            <name>lf-dip</name>
+            <id>24</id>
+            <position>-47 -136 0 </position>
+            <limits>
+              <rotx>-30 90</rotx>
+              <roty>0 0</roty>
+              <rotz>0 0</rotz>
+            </limits>
+            <joint>
+              <name>lf-tip</name>
+              <id>25</id>
+              <position>-53 -156 0 </position>
+              <limits>
+                <rotx>0 0</rotx>
+                <roty>0 0</roty>
+                <rotz>0 0</rotz>
+              </limits>
+            </joint>
+          </joint>
+        </joint>
+      </joint>
+    </joint> <!-- end little finger -->  </joint>
+</skeleton>
