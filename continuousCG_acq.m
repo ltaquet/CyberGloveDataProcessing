@@ -37,37 +37,72 @@ timestamps = strings(100);
 num_stamps = 0;
 last_mark = 0;
 
+
 while MARKorEND ~= "End"
     MARKorEND = questdlg('Record Time Stamp or End Stream?', ...
         'Mark or End?', ...
-        'Mark','End','Mark');
+        'Mark','Toss','End','Mark');
     if MARKorEND == "End"
         write(s,"!!!",'string');
     end 
     
+    if MARKorEND == "Toss"
+        time_stamped = datestr(now,'HH:MM:SS');
+        timestamp1 = '0';
+        while ~strcmp(timestamp1, time_stamped)
+            if firstPass
+                line = read(s,60,'char');
+                fprintf('\n');
+                timestamp1 = retrieve_CGtimestamp(line);
+                firstPass = false;
+            else
+                line = read(s,61,'char');
+                fprintf('\n');
+                timestamp1 = retrieve_CGtimestamp(line);
+            end           
+        end
+        
+    end 
+    
     if MARKorEND == "Mark"
+        time_stamped = datestr(now,'HH:MM:SS');
         time_elapsed = toc;
         task_time = time_elapsed - last_mark;
         last_mark = time_elapsed;
         
         num_stamps = num_stamps + 1;
-        timestamps(num_stamps) = datestr(now,'HH:MM:SS');
-        if num_stamps == 1
+        timestamps(num_stamps) = time_stamped;
+        if firstPass
            read(s,2,'char')  
         end
         
         rawData = zeros(sample_rate*floor(task_time),23,'int16'); %TEST%
+        data_time = strings(sample_rate*floor(task_time));
         dataRow = zeros(1,23);
 
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
-        for i = 1:1:(sample_rate*floor(task_time))
+        timestamp1 = '0';
+        while ~strcmp(timestamp1, time_stamped)
+        %for i = 1:1:(sample_rate*floor(task_time))
            if firstPass
 %               hang = read(s,3,'char')
-              time = read(s,14,'char')
+              time = read(s,14,'char');
+              if ~isCG_timestamp(time)
+                  write(s,"!!!",'string');
+                  return
+              end
+              timestamp1 = time(1:(end-6));
+              
+
               firstPass = false;
            else
-              time = read(s,17,'char')
+              time = read(s,17,'char');
+              if ~isCG_timestamp(time)
+                  write(s,"!!!",'string');
+                  return
+              end
+              timestamp1 = time(4:(end-6));
            end
            
            for index = 1:1:23
@@ -90,16 +125,22 @@ while MARKorEND ~= "End"
             %rawData = [rawData; dataRow];
             rawData(sampleCount,:) = dataRow;
             
+            [~, fullTS] = retrieve_CGtimestamp(time);
+            data_time(sampleCount) = fullTS;
+            
             sampleCount = sampleCount + 1;
 
         end
+        
+        rawData = rawData(1:(sampleCount-1),:);
+        data_time = data_time(1:(sampleCount-1));
         
         backup = strcat(PID, "_raw_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')),'.mat');
         
         cd ../../patients/
         cd(PID)
         cd('Uncalibrated Data');        
-        save(backup, 'rawData');
+        save(backup, 'rawData', 'data_time');
         cd(curr_dir);
     end
 

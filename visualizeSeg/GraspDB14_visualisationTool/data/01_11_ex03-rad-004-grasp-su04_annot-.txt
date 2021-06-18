@@ -1,0 +1,6 @@
+# interval   annotation
+   1   24    .rest
+  25   81    reach-overopen-closing
+  82  164    .grasp
+ 165  233    retract-opening
+ 234  282    .rest

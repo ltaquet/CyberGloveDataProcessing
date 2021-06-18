@@ -1,0 +1,24 @@
+function [spanArray] = spanOfTasks()
+%spanOfTask 
+%   Returns the time span of a CyberGlove Calibrated Trial
+
+filetype = strcat('*.mat');
+dirTask = dir(filetype);
+spanArray = string(length(dirTask));
+
+
+ for index = 1:1:length(unprocessed_files)
+     
+     
+     load(dirTask(index).name); 
+     startTime = data_time(1);
+
+     endTime = data_time(end);
+     
+ end
+
+
+
+
+end
+

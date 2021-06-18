@@ -68,7 +68,7 @@ end
      end
      cd(trial_name);
   
-     save(strcat(PID,'_',task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f');
+     save(strcat(PID,'_',task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time');
      
      cd ../../'Uncalibrated Data'
       
