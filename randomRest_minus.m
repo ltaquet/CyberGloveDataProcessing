@@ -9,9 +9,8 @@ preR = r;
 
 if floor(minusT) < r
     r = r - floor(minusT);
+    pause(r);
 end
-
-pause(r);
 
 
 end

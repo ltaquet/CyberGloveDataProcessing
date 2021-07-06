@@ -21,8 +21,17 @@ clc; clear
 %Set current directory as location of this script
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
 
+hand = questdlg('Which hand?', ...
+        'Hand?' ,'Left','Right','Right');
+
+if strcmp(hand,'Right')
+    comport = "COM6";
+else
+    comport = "COM8";
+end
+    
 %Connects to CyberGlove
-s = serialport("COM6", 115200);
+s = serialport(comport, 115200);
 s.Parity = 'none';
 s.FlowControl = 'none';
 s.StopBits = 1;

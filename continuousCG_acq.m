@@ -52,12 +52,12 @@ while MARKorEND ~= "End"
         while ~strcmp(timestamp1, time_stamped)
             if firstPass
                 line = read(s,60,'char');
-                fprintf('\n');
+                
                 timestamp1 = retrieve_CGtimestamp(line);
                 firstPass = false;
             else
                 line = read(s,61,'char');
-                fprintf('\n');
+                fprintf('%s\n',line);
                 timestamp1 = retrieve_CGtimestamp(line);
             end           
         end
@@ -90,6 +90,8 @@ while MARKorEND ~= "End"
               time = read(s,14,'char');
               if ~isCG_timestamp(time)
                   write(s,"!!!",'string');
+                  fprintf('Toss Error Dump\n');
+                  read(s,s.NumBytesAvailable,'char');
                   return
               end
               timestamp1 = time(1:(end-6));
@@ -100,6 +102,8 @@ while MARKorEND ~= "End"
               time = read(s,17,'char');
               if ~isCG_timestamp(time)
                   write(s,"!!!",'string');
+                  fprintf('Toss Error Dump\n');
+                  read(s,s.NumBytesAvailable,'char');
                   return
               end
               timestamp1 = time(4:(end-6));
