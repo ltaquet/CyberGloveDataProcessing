@@ -14,3 +14,4 @@ else
     fprintf('This patient already exists\n');
 end
 cd(curr_dir);
+importCal;

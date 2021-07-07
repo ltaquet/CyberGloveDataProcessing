@@ -8,7 +8,10 @@ if ~numel(regexp(timestamp_string,validTS))
    fprintf('Assumed timestamp: ');
    fprintf(timestamp_string);
    fprintf('\n');
+   fprintf(datestr(now,'HH:MM:SS'));
+   fprintf('\n');
    isValid = false;  
+   
 else
     isValid = true;
 end

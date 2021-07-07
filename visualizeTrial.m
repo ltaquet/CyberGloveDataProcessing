@@ -10,7 +10,7 @@
 clc; clear
 
 %Connects to CyberGlove
-s = serialport("COM6", 115200);
+s = serialport("COM8", 115200);
 s.Parity = 'none';
 s.FlowControl = 'none';
 s.StopBits = 1;
@@ -130,9 +130,9 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % NOTE: Uses calibration file produced by CG DCU
-
+cd cal
 if isfile(strcat(PID,'_cal.mat'))
-   cd cal
+   %cd cal
    load(strcat(PID,'_cal.mat'));
 else
     cd(curr_dir);
@@ -191,7 +191,7 @@ cd(curr_dir)
 
 TXTfilename = "VIS" + filename + ".txt";
 
-cd('D:\CG Visualization\tools\matlab\data')
+cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg\data')
 delete '16_14_ex01-rad-004-grasp-su06'
 delete '16_14_ex01-rad-004-grasp-su06.mat'
 delete '16_14_ex01-rad-004-grasp-su06_w_traj.mat'
@@ -223,6 +223,9 @@ txtData = [labelMat angles];
 fprintf(txtID,'%u %2.2u %2.2u %2.2u %2.2u %08.5f %u %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f %.5f\n',transpose(txtData));
 
 fclose(txtID);
+
+cd ..
+script_exampleusage_visualisationTool;
 
 cd(curr_dir);
 

@@ -37,7 +37,7 @@ switch cmd
         num_stamps = num_stamps + 1;
         timestamps(num_stamps) = time_stamped;
         if firstPass
-           read(s,2,'char')  
+           read(s,2,'char');  
         end
         
         rawData = zeros(sample_rate*floor(task_time),23,'int16'); %TEST%
@@ -47,14 +47,20 @@ switch cmd
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
         timestamp1 = '0';
-        while ~strcmp(timestamp1, time_stamped)
+        while ~strcmp(timestamp1, time_stamped) && (s.NumBytesAvailable > 61)
         %for i = 1:1:(sample_rate*floor(task_time))
            if firstPass
 %               hang = read(s,3,'char')
               time = read(s,14,'char');
-              if ~isCG_timestamp(time)
-                  write(s,"!!!",'string');
-                  return
+              while ~isCG_timestamp(time)
+                  [~,time] = Jump2ValidDataLine(s);
+                  time
+%                  write(s,"!!!",'string');
+%                   fprintf(datestr(now,'HH:MM:SS'));
+%                   fprintf('\n');
+%                   read(s,s.NumBytesAvailable,'char');
+%                   error('Error: Dang...');
+%                   %return
               end
               timestamp1 = time(1:(end-6));
               
@@ -62,9 +68,15 @@ switch cmd
               firstPass = false;
            else
               time = read(s,17,'char');
-              if ~isCG_timestamp(time)
-                  write(s,"!!!",'string');
-                  return
+              while ~isCG_timestamp(time)
+                  [~,time] = Jump2ValidDataLine(s);
+                  time
+%                   fprintf(datestr(now,'HH:MM:SS'));
+%                   fprintf('\n');
+%                   write(s,"!!!",'string');
+%                   read(s,s.NumBytesAvailable,'char')
+%                   pause(5);
+%                   error('Error: Dang...');
               end
               timestamp1 = time(4:(end-6));
            end
@@ -111,15 +123,15 @@ switch cmd
         time_stamped = datestr(now,'HH:MM:SS');
         tic;
         timestamp1 = '0';
-        while ~strcmp(timestamp1, time_stamped)
+        while ~strcmp(timestamp1, time_stamped) && (s.NumBytesAvailable > 61)
             if firstPass
                 line = read(s,60,'char');
-                fprintf('\n');
+                %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
                 firstPass = false;
             else
                 line = read(s,61,'char');
-                fprintf('\n');
+                %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
             end           
         end

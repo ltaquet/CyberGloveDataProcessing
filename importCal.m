@@ -4,6 +4,9 @@
 
 % NOTE: Uses calibration file produced by CG DCU
 
+curr_dir = pwd;
+cd ../../'New Calibrations'
+
 %Select CG III calibration file from directory
 f = msgbox('Select CG III Calibration file');
 uiwait(f);
@@ -35,5 +38,33 @@ end
 offsets = cat(1,cell2mat(calNums(1,1)),cell2mat(calNums(2,1)),cell2mat(calNums(3,1)),cell2mat(calNums(4,1)),cell2mat(calNums(5,1)),cell2mat(calNums(6,1)));
 gains = cat(1,cell2mat(calNums(1,2)),cell2mat(calNums(2,2)),cell2mat(calNums(3,2)),cell2mat(calNums(4,2)),cell2mat(calNums(5,2)),cell2mat(calNums(6,2)));
 
-save(matCalname, 'offsets','gains');
+cd(curr_dir)
 
+cd ../../Patients
+patients = dir();
+patients = patients(3:end);
+patients = struct2cell(patients);
+patients = patients(1,:);
+patients{end+1} = 'New Patient';
+PID = listdlg('Name','Patient ID?', 'PromptString','Patient ID?','ListString',patients,...
+    'SelectionMode','single',...
+    'ListSize',[200 100]);
+cd(curr_dir);
+if isempty(PID)
+    fprintf("Aborted\n");
+    return
+end
+PID = patients{PID};
+
+if PID == "New Patient"
+    fprintf("Run newPatient.m to create directory for new patient\n");
+    return
+end
+
+cd(curr_dir)
+cd ../../Patients
+cd(PID)
+cd('cal')
+
+save(matCalname, 'offsets','gains');
+cd(curr_dir)
