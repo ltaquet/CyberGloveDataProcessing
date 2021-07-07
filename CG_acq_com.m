@@ -52,13 +52,15 @@ switch cmd
            if firstPass
 %               hang = read(s,3,'char')
               time = read(s,14,'char');
-              if ~isCG_timestamp(time)
-                 write(s,"!!!",'string');
-                  fprintf(datestr(now,'HH:MM:SS'));
-                  fprintf('\n');
-                  read(s,s.NumBytesAvailable,'char');
-                  error('Error: Dang...');
-                  %return
+              while ~isCG_timestamp(time)
+                  [~,time] = Jump2ValidDataLine(s);
+                  time
+%                  write(s,"!!!",'string');
+%                   fprintf(datestr(now,'HH:MM:SS'));
+%                   fprintf('\n');
+%                   read(s,s.NumBytesAvailable,'char');
+%                   error('Error: Dang...');
+%                   %return
               end
               timestamp1 = time(1:(end-6));
               
@@ -66,13 +68,15 @@ switch cmd
               firstPass = false;
            else
               time = read(s,17,'char');
-              if ~isCG_timestamp(time)
-                  fprintf(datestr(now,'HH:MM:SS'));
-                  fprintf('\n');
-                  write(s,"!!!",'string');
-                  read(s,s.NumBytesAvailable,'char')
-                  pause(5);
-                  error('Error: Dang...');
+              while ~isCG_timestamp(time)
+                  [~,time] = Jump2ValidDataLine(s);
+                  time
+%                   fprintf(datestr(now,'HH:MM:SS'));
+%                   fprintf('\n');
+%                   write(s,"!!!",'string');
+%                   read(s,s.NumBytesAvailable,'char')
+%                   pause(5);
+%                   error('Error: Dang...');
               end
               timestamp1 = time(4:(end-6));
            end

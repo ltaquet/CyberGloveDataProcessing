@@ -100,7 +100,7 @@ for sampleCount = 1:1:slength
         cd(PID)
         cd('Uncalibrated Data');        
         save(backup, 'rawData', 'data_time');
-        cd(curr_dir);
+        
    
 
 
