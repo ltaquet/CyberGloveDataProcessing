@@ -11,12 +11,34 @@ switch cmd
     
     case 'Start'
         % Enables Wifi Streaming
+        write(s,"1m",'string');
+        write(s,3,'uint8');
+        write(s,"1es",'string');
+        write(s,"1du",'string');
         write(s,"1ew",'string');
+        write(s,"1w",'string');
+        write(s,1,'uint8');
+        write(s,"1s",'string');
+        write(s,1,'uint8');
+        write(s,"1A",'string');   
+        binFile = strcat(PID, "_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')));
+        write(s,binFile,'string'); 
+        pause(1)
+        numBytes = s.NumBytesAvailable;
+        write(s,1,'uint8');
+        pause(3);
+        write(s,1,'uint8');
+        pause(1);
+        
+
         write(s,"1ts",'string');
 
         %sets CyperGlove clock to current time
         curr_time = datestr(now,'HH:MM:SS');
         write(s,curr_time,'string');
+        
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
 
         % Initialize Timestamp Vars
         timestamps = strings(100);
@@ -24,7 +46,13 @@ switch cmd
         last_mark = 0;
         pause(1);
         flush(s);
+        pause(1);
+        
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
+        
         write(s,"1S",'string'); tic;
+        pause(1)
         firstPass = true;
        
         
@@ -116,7 +144,7 @@ switch cmd
         cd ../../patients/
         cd(PID)
         cd('Uncalibrated Data');        
-        save(backup, 'rawData', 'data_time');
+        save(backup, 'rawData', 'data_time','time_stamped');
         cd(curr_dir);
         
     case 'Toss'
@@ -137,6 +165,8 @@ switch cmd
         end
     
     case 'End'        
-        write(s,"!!!",'string');
+        write(s,3,'uint8');
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
         
 end
