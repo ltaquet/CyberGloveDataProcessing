@@ -7,7 +7,7 @@ TSandDataLength = 61;
 TSlength = 14;
 [nonTS_hang] = startOfNewSample_CG(data_string);
 read(device,TSandDataLength-TSlength-nonTS_hang,'char');
-time = strjoin(string(read(device,14,'char')),'');
-
+%time = strjoin(string(read(device,14,'char')),'');
+time = read(device,14,'char');
 end
 

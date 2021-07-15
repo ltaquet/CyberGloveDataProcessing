@@ -57,7 +57,7 @@ switch cmd
        
         
     case 'Mark'
-          time_stamped = datestr(now,'HH:MM:SS');
+        time_stamped = datestr(now,'HH:MM:SS');
         time_elapsed = toc;
         task_time = time_elapsed - last_mark;
         last_mark = time_elapsed;
@@ -75,7 +75,12 @@ switch cmd
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
         timestamp1 = '0';
+        
         while ~strcmp(timestamp1, time_stamped) && (s.NumBytesAvailable > 61)
+%         timestamp1
+%         time_stamped
+%         equal_timestamp = ~strcmp(timestamp1, time_stamped)
+        
         %for i = 1:1:(sample_rate*floor(task_time))
            if firstPass
 %               hang = read(s,3,'char')
@@ -91,11 +96,15 @@ switch cmd
 %                   %return
               end
               timestamp1 = time(1:(end-6));
-              
+              if strcmp(timestamp1(end),':')
+                 error('shift'); 
+              end
 
               firstPass = false;
            else
-              time = read(s,17,'char');
+              %time = read(s,17,'char');
+              [time] = read2endTimeStamp_CG(s);
+              
               while ~isCG_timestamp(time)
                   [~,time] = Jump2ValidDataLine(s);
                   time
@@ -106,7 +115,11 @@ switch cmd
 %                   pause(5);
 %                   error('Error: Dang...');
               end
-              timestamp1 = time(4:(end-6));
+              %timestamp1 = time(4:(end-6));
+              timestamp1 = time(1:(end-6));
+              if strcmp(timestamp1(end),':')
+                 error('shift'); 
+              end
            end
            
            for index = 1:1:23
@@ -128,6 +141,7 @@ switch cmd
             
             %rawData = [rawData; dataRow];
             rawData(sampleCount,:) = dataRow;
+            
             
             [~, fullTS] = retrieve_CGtimestamp(time);
             data_time(sampleCount) = fullTS;
@@ -156,11 +170,19 @@ switch cmd
                 line = read(s,60,'char');
                 %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
+                if strcmp(timestamp1,'')
+                   [~,timestamp1] = Jump2ValidDataLine(s);
+                   timestamp1 = timestamp1(1:(end-6));
+                end
                 firstPass = false;
             else
                 line = read(s,61,'char');
                 %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
+                if strcmp(timestamp1,'')
+                   [~,timestamp1] = Jump2ValidDataLine(s);
+                   timestamp1 = timestamp1(1:(end-6));
+                end
             end           
         end
     
