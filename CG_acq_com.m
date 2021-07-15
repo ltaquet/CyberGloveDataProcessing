@@ -11,12 +11,34 @@ switch cmd
     
     case 'Start'
         % Enables Wifi Streaming
+        write(s,"1m",'string');
+        write(s,3,'uint8');
+        write(s,"1es",'string');
+        write(s,"1du",'string');
         write(s,"1ew",'string');
+        write(s,"1w",'string');
+        write(s,1,'uint8');
+        write(s,"1s",'string');
+        write(s,1,'uint8');
+        write(s,"1A",'string');   
+        binFile = strcat(PID, "_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')));
+        write(s,binFile,'string'); 
+        pause(1)
+        numBytes = s.NumBytesAvailable;
+        write(s,1,'uint8');
+        pause(3);
+        write(s,1,'uint8');
+        pause(1);
+        
+
         write(s,"1ts",'string');
 
         %sets CyperGlove clock to current time
         curr_time = datestr(now,'HH:MM:SS');
         write(s,curr_time,'string');
+        
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
 
         % Initialize Timestamp Vars
         timestamps = strings(100);
@@ -24,12 +46,18 @@ switch cmd
         last_mark = 0;
         pause(1);
         flush(s);
+        pause(1);
+        
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
+        
         write(s,"1S",'string'); tic;
+        pause(1)
         firstPass = true;
        
         
     case 'Mark'
-          time_stamped = datestr(now,'HH:MM:SS');
+        time_stamped = datestr(now,'HH:MM:SS');
         time_elapsed = toc;
         task_time = time_elapsed - last_mark;
         last_mark = time_elapsed;
@@ -47,7 +75,12 @@ switch cmd
         sampleCount = 1;
         %while s.NumBytesAvailable >= 48
         timestamp1 = '0';
+        
         while ~strcmp(timestamp1, time_stamped) && (s.NumBytesAvailable > 61)
+%         timestamp1
+%         time_stamped
+%         equal_timestamp = ~strcmp(timestamp1, time_stamped)
+        
         %for i = 1:1:(sample_rate*floor(task_time))
            if firstPass
 %               hang = read(s,3,'char')
@@ -63,11 +96,15 @@ switch cmd
 %                   %return
               end
               timestamp1 = time(1:(end-6));
-              
+              if strcmp(timestamp1(end),':')
+                 error('shift'); 
+              end
 
               firstPass = false;
            else
-              time = read(s,17,'char');
+              %time = read(s,17,'char');
+              [time] = read2endTimeStamp_CG(s);
+              
               while ~isCG_timestamp(time)
                   [~,time] = Jump2ValidDataLine(s);
                   time
@@ -78,7 +115,11 @@ switch cmd
 %                   pause(5);
 %                   error('Error: Dang...');
               end
-              timestamp1 = time(4:(end-6));
+              %timestamp1 = time(4:(end-6));
+              timestamp1 = time(1:(end-6));
+              if strcmp(timestamp1(end),':')
+                 error('shift'); 
+              end
            end
            
            for index = 1:1:23
@@ -101,6 +142,7 @@ switch cmd
             %rawData = [rawData; dataRow];
             rawData(sampleCount,:) = dataRow;
             
+            
             [~, fullTS] = retrieve_CGtimestamp(time);
             data_time(sampleCount) = fullTS;
             
@@ -116,7 +158,7 @@ switch cmd
         cd ../../patients/
         cd(PID)
         cd('Uncalibrated Data');        
-        save(backup, 'rawData', 'data_time');
+        save(backup, 'rawData', 'data_time','time_stamped');
         cd(curr_dir);
         
     case 'Toss'
@@ -128,15 +170,25 @@ switch cmd
                 line = read(s,60,'char');
                 %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
+                if strcmp(timestamp1,'')
+                   [~,timestamp1] = Jump2ValidDataLine(s);
+                   timestamp1 = timestamp1(1:(end-6));
+                end
                 firstPass = false;
             else
                 line = read(s,61,'char');
                 %fprintf('\n');
                 timestamp1 = retrieve_CGtimestamp(line);
+                if strcmp(timestamp1,'')
+                   [~,timestamp1] = Jump2ValidDataLine(s);
+                   timestamp1 = timestamp1(1:(end-6));
+                end
             end           
         end
     
     case 'End'        
-        write(s,"!!!",'string');
+        write(s,3,'uint8');
+        fprintf(datestr(now,'HH:MM:SS:FFF'));
+        fprintf('\n');
         
 end

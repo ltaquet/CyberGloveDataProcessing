@@ -7,6 +7,12 @@ validTS = '(2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]:[0-2][0-9]:[0-2]S';
 
 
 nonTS_hang = strlength(data_string) - e(end);
+if nonTS_hang < 0
+   data_string
+   nonTS_hang
+   end_ind = e(end)
+   error('Neg'); 
+end
 
 
 end
