@@ -11,16 +11,44 @@ sensors = [sensors; sensors_full];
 % RETRIEVE GLOVE DATA %
 %%%%%%%%%%%%%%%%%%%%%%%
 
-% Select CG III binary sd card file from directory
-% f = msgbox('Select CG III binary sd card file');
-% uiwait(f);
-% [file,path] = uigetfile('*', "Select CG III binary sd card file");
-% filename = file;
-% %Opens selected file
-file = 'ongterm3';
+cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove');
+curr_dir = pwd;
+addpath(curr_dir);
+cd ../../Patients
+patients = dir();
+patients = patients(3:end);
+patients = struct2cell(patients);
+patients = patients(1,:);
+patients{end+1} = 'New Patient';
+PID = listdlg('Name','Patient ID?', 'PromptString','Patient ID?','ListString',patients,...
+    'SelectionMode','single',...
+    'ListSize',[200 100]);
+
+if isempty(PID)
+    fprintf("Aborted\n");
+    return
+end
+PID = patients{PID};
+cd(PID);
+cd('Raw Data');
+
+%Select CG III binary sd card file from directory
+f = msgbox('Select CG III binary sd card file');
+uiwait(f);
+[file,path] = uigetfile('*', "Select CG III binary sd card file");
+cd(path);
+filename = file
+
+file_info=dir(file);
+the_size = file_info.bytes;
+data_size = the_size - 28 - length(filename);
+sample_number = floor(data_size/(131-55)) - 1;
+
+%Opens selected file
+%file = 'ongterm3';
 fileID = fopen(file);
 %slength = 251680;
-slength = 186840;
+slength = sample_number;
 
 % Skips over header info
 HeaderX = fgetl(fileID);
@@ -28,7 +56,7 @@ header = fread(fileID,28,'uint8=>char*1');
 
 % Sets loop condition 
 isColon = ":";
-PID = 'Leon_T';
+
 
 % LOOP CONDITION EXPLANATION:
 %%%% The last time stamp in the file starts with "00 " 
@@ -90,18 +118,18 @@ for sampleCount = 1:1:slength
             skip = fread(fileID,3,'*char');
 
  end
-        
-        rawData = rawData(1:(sampleCount-1),:);
-        data_time = data_time(1:(sampleCount-1));
-        
-        backup = strcat(PID, "_raw_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')),'.mat');
-        
-        cd ../../patients/
-        cd(PID)
-        cd('Uncalibrated Data');        
-        save(backup, 'rawData', 'data_time');
-        
-   
+ 
+ rawData = rawData(1:(sampleCount-1),:);
+ data_time = data_time(1:(sampleCount-1));
+ 
+ backup = strcat(PID, "_raw_", filename,'.mat');
+ cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove');
+ cd ../../patients/
+ cd(PID)
+ cd('Uncalibrated Data');
+ save(backup, 'rawData', 'data_time');
+ 
+ 
 
 
 %Closes File
