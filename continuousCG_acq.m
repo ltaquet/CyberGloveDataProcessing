@@ -1,8 +1,11 @@
 function [timestamps] = continuousCG_acq(port, PID, player,sample_rate)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+%continuousCG_acq : Summary of this function goes here
+%   PHASED OUT FUNCTION 
 
+%Takes in already initialized CyberGlove serial port
 s = port;
+
+%Keeps track of starting directory
 curr_dir = pwd;
 
 %filename = strcat(PID,'_',answer,'.mat');
@@ -30,6 +33,10 @@ pause(1);
 play(player)
 
 MARKorEND = "";
+
+%The number of pre-data bytes differs if it is the first sample recorded
+%when streaming has started so a boolean for if it is the first sample is 
+%needed
 firstPass = true;
 
 % Initialize Timestamp Vars
@@ -37,18 +44,24 @@ timestamps = strings(100);
 num_stamps = 0;
 last_mark = 0;
 
-
+% Loop uses the dialog box to mark the end of a sampled task or end the
+% stream
 while MARKorEND ~= "End"
     MARKorEND = questdlg('Record Time Stamp or End Stream?', ...
         'Mark or End?', ...
         'Mark','Toss','End','Mark');
     if MARKorEND == "End"
-        write(s,"!!!",'string');
+        write(s,"!!!",'string'); %Ends stream (does not save to SD card)
     end 
     
-    if MARKorEND == "Toss"
-        time_stamped = datestr(now,'HH:MM:SS');
+    % Tosses/does not save all samples since last mark or toss
+    if MARKorEND == "Toss" 
+        % Uses the timestamp at the moment the button is pressed compared
+        % to the CG timestamp to determine the sample to stop tossing
+        time_stamped = datestr(now,'HH:MM:SS'); 
         timestamp1 = '0';
+        % Searches and tosses each CyberGlove sample until it finds the 
+        % last sample to toss
         while ~strcmp(timestamp1, time_stamped)
             if firstPass
                 line = read(s,60,'char');
@@ -57,7 +70,7 @@ while MARKorEND ~= "End"
                 firstPass = false;
             else
                 line = read(s,61,'char');
-                fprintf('%s\n',line);
+                %fprintf('%s\n',line);
                 timestamp1 = retrieve_CGtimestamp(line);
             end           
         end
@@ -65,8 +78,10 @@ while MARKorEND ~= "End"
     end 
     
     if MARKorEND == "Mark"
+        % Uses the timestamp at the moment the button is pressed compared
+        % to the CG timestamp to determine the sample to stop tossing
         time_stamped = datestr(now,'HH:MM:SS');
-        time_elapsed = toc;
+        time_elapsed = toc; %NOT USED EVIDENCE OF PHASE OUT
         task_time = time_elapsed - last_mark;
         last_mark = time_elapsed;
         

@@ -1,17 +1,8 @@
 function [offsets,gains] = importCal_fn(PID)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
-% NOTE: Uses calibration file produced by CG DCU
+%importCal_fn : PHASED OUT
+%   PHASED OUT REPLACED BY importCal2matlab 
 
-%Select CG III calibration file from directory
-% f = msgbox('Select CG III Calibration file');
-% uiwait(f);
-% [file2,path2] = uigetfile('*.cal');
-% if file2(end-3) == "."
-%     matCalname = file2(1:end-4);
-% end
-% matCalname = strcat(matCalname,'_cal');
-
+%Navigates to PID subfolder containing CG Mat cal file
 curr_dir = pwd;
 cd ../../Patients
 cd(PID)
@@ -19,6 +10,7 @@ cd cal
 file2 = strcat(PID,'.cal');
 matCalname = strcat(PID,'_cal');
 
+%Autoloads cal file based on cal file naming convention(PID_cal.mat)
 %Opens selected file
 calID = fopen(file2);
 

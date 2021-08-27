@@ -1,5 +1,6 @@
 function [firstPass] = CG_acq_com(cmd ,port, PID, player,sample_rate, firstPass, timestamps, num_stamps, last_mark)
-%UNTITLED Summary of this function goes here
+%CG_acq_com Allows for the start, stop, marking, and tossing of a
+%CyberGlove stream using an established com port to a CyberGlove.
 %   Detailed explanation goes here
 
 s = port;
@@ -37,8 +38,8 @@ switch cmd
         curr_time = datestr(now,'HH:MM:SS');
         write(s,curr_time,'string');
         
-        fprintf(datestr(now,'HH:MM:SS:FFF'));
-        fprintf('\n');
+%         fprintf(datestr(now,'HH:MM:SS:FFF'));
+%         fprintf('\n');
 
         % Initialize Timestamp Vars
         timestamps = strings(100);
@@ -48,8 +49,8 @@ switch cmd
         flush(s);
         pause(1);
         
-        fprintf(datestr(now,'HH:MM:SS:FFF'));
-        fprintf('\n');
+%         fprintf(datestr(now,'HH:MM:SS:FFF'));
+%         fprintf('\n');
         
         write(s,"1S",'string'); tic;
         pause(1)

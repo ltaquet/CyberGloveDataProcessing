@@ -1,6 +1,6 @@
 function [tasks] = performTask(taskIndex,tasks,curr_index,uncheckBool)
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+%performTask PHASED OUT
+%   PHASED OUT
 if uncheckBool
     tasks(taskIndex).completed = false;
 end

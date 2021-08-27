@@ -21,9 +21,11 @@ clc; clear
 %Set current directory as location of this script
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
 
+%Ask user for which CyberGlove is being used: right or left
 hand = questdlg('Which hand?', ...
         'Hand?' ,'Left','Right','Right');
 
+%Serial Port Redirector set up determines which glove is which com port
 if strcmp(hand,'Right')
     comport = "COM6";
 else

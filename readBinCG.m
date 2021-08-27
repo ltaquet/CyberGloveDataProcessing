@@ -1,3 +1,15 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% readBinCG
+% Created on: 5/05/2021
+% Created by: Leon Taquet
+% Status: 
+% Uses: Reads in the binary CyberGlove data file into PID specific saved 
+% MATLAB workspace
+% Functionality to add: - 
+%                       - 
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 clear; clc; 
 %IMPROVEMENT TO DO:
 % - Verify angle calculations
@@ -11,6 +23,7 @@ sensors = [sensors; sensors_full];
 % RETRIEVE GLOVE DATA %
 %%%%%%%%%%%%%%%%%%%%%%%
 
+%Navigate to the PID directory and ask the user to select a PID
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove');
 curr_dir = pwd;
 addpath(curr_dir);
@@ -29,6 +42,8 @@ if isempty(PID)
     return
 end
 PID = patients{PID};
+
+%Navigate to selected PID's raw data 
 cd(PID);
 cd('Raw Data');
 
@@ -37,8 +52,10 @@ f = msgbox('Select CG III binary sd card file');
 uiwait(f);
 [file,path] = uigetfile('*', "Select CG III binary sd card file");
 cd(path);
-filename = file
+filename = file;
 
+%Uses file size in bytes to determine how many samples of data are in the
+%file
 file_info=dir(file);
 the_size = file_info.bytes;
 data_size = the_size - 28 - length(filename);
@@ -54,8 +71,6 @@ slength = sample_number;
 HeaderX = fgetl(fileID);
 header = fread(fileID,28,'uint8=>char*1');
 
-% Sets loop condition 
-isColon = ":";
 
 
 % LOOP CONDITION EXPLANATION:
@@ -81,6 +96,8 @@ for sampleCount = 1:1:slength
     
     time = fread(fileID,14,'*char');
     time = strjoin(string(time),'');
+              %Runs when an invalid CG timestamp is encountered
+              %Ends with valid data at the begining of device buffer
               while ~isCG_timestamp(time)
                   sampleCount
                   [~,time] = Jump2ValidDataLine_binFile(fileID);
@@ -91,7 +108,7 @@ for sampleCount = 1:1:slength
               end
               timestamp1 = time(4:(end-6));
            
-           
+           %Loops for each sensor
            for index = 1:1:23
                 
                if index ~= 7

@@ -1,8 +1,14 @@
 function [success] = randomRest(min,max)
-%UNTITLED7 Summary of this function goes here
-%   Detailed explanation goes here
+%randomRest Pauses a ramdom amount of seconds between min and max
+%   Pauses a ramdom amount of seconds between min and max
+
+%Initializes random num generator
 rng('shuffle');
+
+%Random num between min and max
 r = randi([min max],1,1);
+
+%Pause r seconds
 pause(r);
 
 success = true;

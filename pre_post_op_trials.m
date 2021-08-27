@@ -2,6 +2,7 @@
 % pre_post_op_trials
 % Created on: 5/05/2021
 % Created by: Leon Taquet
+% Status: PHASED OUT - Used to Brainstom Healthies App
 % Uses: Randomly presents 6 sets of CyberGlove Tasks 20 times each with
 %       random 5-15 second rests 
 % Functionality to add: - 

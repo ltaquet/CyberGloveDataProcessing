@@ -10,7 +10,7 @@
 clc; clear
 
 %Connects to CyberGlove
-s = serialport("COM8", 115200);
+s = serialport("COM6", 115200);
 s.Parity = 'none';
 s.FlowControl = 'none';
 s.StopBits = 1;

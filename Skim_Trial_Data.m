@@ -1,8 +1,20 @@
- %test pull
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Skim_Trial_Data 
+% Created on: 7/01/2021
+% Created by: Leon Taquet
+% Uses: Allows the user to see MCP plot for each finger for each task
+% across a trial to roughly verify that it is valid data.
+% 
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%test pull
 clc; clear
 
 %Set current directory as location of this script
 cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+addpath('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
 
 sensors = ["TR" "IT" "OT" "TA" "II" "MI" "OI" "IM" "MM" "OM" "MA" "IR" "MR" "OR" "RA" "IP" "MP" "OP" "PA" "PR" "TW" "SW"];
 sensors_full = ["Thumb Roll" "Thumb metacarpal" "Thumb proximal" "Thumb-index Abduction" "Index metacarpal" "Index proximal" "Index distal (no sensor)" "ABD" "Middle metacarpal" "Middle proximal" "Middle distal (no sensor)" "Index-middle abduction" "Ring metacarpal" "Ring proximal" "Ring distal (no sensor)" "Middle-ring abduction" "Pinky metacarpal" "Pinky proximal" "Pinky distal (no sensor)" "Ring-Pinky abduction" "Palm flex" "Wrist pitch" ];
@@ -48,7 +60,10 @@ unprocessed_files = dir(filetype);
 
 
 for index = 1:1:length(unprocessed_files)
+    %Load a task
     load(unprocessed_files(index).name);
+    
+    %Creates a figure containing MCP plots for each finger
     figure;
     hold on;
     tiledlayout(2,3)
@@ -72,6 +87,8 @@ for index = 1:1:length(unprocessed_files)
     finger_axis = [floor(min(min(angles_deg_f)))-5 ceil(max(max(angles_deg_f(:,3:end))))+5];
     thumb_axis = [floor(min(angles_deg_f(:,2)))-5 ceil(max(angles_deg_f(:,2)))+5];
     
+    %Sets a uniform x and y limit for the plots in the figure for
+    %comparison
     for i = 1:1:length(fingers)
         nexttile;
         plot(angles_deg_f(:,fingers(i)));

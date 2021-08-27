@@ -1,3 +1,4 @@
+%Phased out
 
  clear; clc;
  f = msgbox('Select CG III raw MAT file');
