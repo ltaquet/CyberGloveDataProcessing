@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Skim_Trial_Data 
 % Created on: 7/01/2021
 % Created by: Leon Taquet
@@ -84,7 +84,7 @@ for index = 1:1:length(unprocessed_files)
         sgtitle(strcat(strrep(unprocessed_files(index).name,'_',' '),' ','Indiv score: ',num2str(indivScore(angles,fing_ind-1))));
     end
     fingers = [2 5 9 13 17];
-    finger_axis = [floor(min(min(angles_deg_f)))-5 ceil(max(max(angles_deg_f(:,3:end))))+5];
+    finger_axis = [floor(min(min(angles_deg_f(:,3:end))))-5 ceil(max(max(angles_deg_f(:,3:end))))+5];
     thumb_axis = [floor(min(angles_deg_f(:,2)))-5 ceil(max(angles_deg_f(:,2)))+5];
     
     %Sets a uniform x and y limit for the plots in the figure for
