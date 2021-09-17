@@ -3,6 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % NOTE: Uses calibration file produced by CG DCU
+addpath('Functions');
 
 %Select CG III calibration file from directory
 f = msgbox('Select CG III Calibration file');

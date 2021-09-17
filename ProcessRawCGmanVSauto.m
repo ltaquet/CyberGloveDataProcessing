@@ -1,4 +1,5 @@
 %Phased out
+addpath('Functions');
 
  clear; clc;
  f = msgbox('Select CG III raw MAT file');

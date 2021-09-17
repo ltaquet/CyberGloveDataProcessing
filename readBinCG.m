@@ -24,9 +24,12 @@ sensors = [sensors; sensors_full];
 %%%%%%%%%%%%%%%%%%%%%%%
 
 %Navigate to the PID directory and ask the user to select a PID
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove');
+cd(fileparts(which('readBinCG.m')));
+addpath('Functions');
+
 curr_dir = pwd;
 addpath(curr_dir);
+addpath('Functions');
 cd ../../Patients
 patients = dir();
 patients = patients(3:end);
@@ -140,7 +143,7 @@ for sampleCount = 1:1:slength
  data_time = data_time(1:(sampleCount-1));
  
  backup = strcat(PID, "_raw_", filename,'.mat');
- cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove');
+ cd(fileparts(which('readBinCG.m')));
  cd ../../patients/
  cd(PID)
  cd('Uncalibrated Data');

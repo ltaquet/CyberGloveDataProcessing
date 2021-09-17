@@ -2,7 +2,8 @@
  
  
 %Set current directory as location of this script
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+cd(fileparts(which('ProcessRawCGmat.mlapp')));
+addpath('Functions');
 
 %Checks directories for patient
 curr_dir = pwd;

@@ -17,10 +17,12 @@ minRest = 1;  %seconds
 maxRest = 3; %seconds
 numMovements = 5; % per trial
 
-addpath('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\Prompt images');
+
 
 %Set current directory as location of this script
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+cd(fileparts(which('pre_post_op_trials.m')));
+addpath('Functions');
+addpath('Prompt images');
 
 %Connects to CyberGlove
 s = serialport("COM6", 115200);

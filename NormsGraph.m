@@ -1,3 +1,5 @@
+addpath('Functions');
+
 %Creates a figure containing MCP plots for each finger
     figure;
     hold on;

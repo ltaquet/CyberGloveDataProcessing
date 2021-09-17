@@ -19,7 +19,8 @@
 clc; clear
 
 %Set current directory as location of this script
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+cd(fileparts(which('serialCGcomV6.m')));
+addpath('Functions');
 
 %Ask user for which CyberGlove is being used: right or left
 hand = questdlg('Which hand?', ...

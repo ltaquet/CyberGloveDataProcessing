@@ -8,6 +8,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 clc; clear
+cd(fileparts(which('visualizeTrial.m')));
+
+addpath('Functions');
 
 %Connects to CyberGlove
 s = serialport("COM6", 115200);
@@ -191,7 +194,7 @@ cd(curr_dir)
 
 TXTfilename = "VIS" + filename + ".txt";
 
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg\data')
+cd('visualizeSeg\data')
 delete '16_14_ex01-rad-004-grasp-su06'
 delete '16_14_ex01-rad-004-grasp-su06.mat'
 delete '16_14_ex01-rad-004-grasp-su06_w_traj.mat'

@@ -4,8 +4,10 @@
 clc; clear
 
 %Set current directory as location of this script
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
-addpath('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove')
+cd(fileparts(which('DivideSD2Movements.m')));
+curr_dir = pwd;
+addpath(curr_dir);
+addpath('Functions');
 
 sensors = ["TR" "IT" "OT" "TA" "II" "MI" "OI" "IM" "MM" "OM" "MA" "IR" "MR" "OR" "RA" "IP" "MP" "OP" "PA" "PR" "TW" "SW"];
 sensors_full = ["Thumb Roll" "Thumb metacarpal" "Thumb proximal" "Thumb-index Abduction" "Index metacarpal" "Index proximal" "Index distal (no sensor)" "ABD" "Middle metacarpal" "Middle proximal" "Middle distal (no sensor)" "Index-middle abduction" "Ring metacarpal" "Ring proximal" "Ring distal (no sensor)" "Middle-ring abduction" "Pinky metacarpal" "Pinky proximal" "Pinky distal (no sensor)" "Ring-Pinky abduction" "Palm flex" "Wrist pitch" ];
@@ -15,7 +17,7 @@ isRunning = true;
 
 %%
 %Checks directories for patient
-curr_dir = pwd;
+cd(curr_dir);
 cd ../../Patients
 patients = dir();
 patients = patients(3:end);

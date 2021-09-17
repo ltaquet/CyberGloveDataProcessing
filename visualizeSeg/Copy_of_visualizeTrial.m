@@ -9,9 +9,11 @@
 
 clc; clear
 
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg')
+%cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg')
 curr_dir = pwd;
 addpath(curr_dir);
+addpath('..');
+addpath('../Functions');
 
 %Choose Patient
 cd ../../../Patients

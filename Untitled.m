@@ -1,4 +1,4 @@
-cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\Debug_Test_Scripts');
+cd(fileparts(which('Debug_Test_Scripts')));
 load('pacing_time_test.mat')
 scatter([data{:,1}],[data{:,2}]);
 at = [data{:,2}];
