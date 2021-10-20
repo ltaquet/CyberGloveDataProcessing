@@ -10,6 +10,7 @@
 clc; clear
 
 cd(fileparts(which('Copy_of_visualizeTrial.m')))
+%cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg')
 curr_dir = pwd;
 addpath(curr_dir);
 addpath('..');
@@ -98,8 +99,8 @@ if ~strcmp(startTime , 'all')
 
 end
 
-cd(curr_dir);
-cd('data');
+
+cd('C:\Users\le40619\Desktop\OR Code\CyberGlove\OR Directory\Code\Intraoperative-CyberGlove\visualizeSeg\data')
 delete '16_14_ex01-rad-004-grasp-su06'
 delete '16_14_ex01-rad-004-grasp-su06.mat'
 delete '16_14_ex01-rad-004-grasp-su06_w_traj.mat'
