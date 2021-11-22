@@ -86,8 +86,8 @@ if ~strcmp(startTime , 'all')
 
     [startInd,endInd] = extractTimeWindowCG(data_time,startTime,endTime);
 
-    startInd = startInd + 75;
-    endInd = endInd + 75;
+    startInd = startInd + 90;
+    endInd = endInd + 90;
 
     if startInd >= length(angles) || endInd >= length(angles)
         fprintf("Out of bounds");

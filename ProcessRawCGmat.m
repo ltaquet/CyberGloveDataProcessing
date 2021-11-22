@@ -2,7 +2,7 @@
  
  
 %Set current directory as location of this script
-cd(fileparts(which('ProcessRawCGmat.mlapp')));
+cd(fileparts(which('ProcessRawCGmat.m')));
 addpath('Functions');
 
 %Checks directories for patient
