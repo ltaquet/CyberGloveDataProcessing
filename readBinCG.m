@@ -61,7 +61,10 @@ filename = file;
 %file
 file_info=dir(file);
 the_size = file_info.bytes;
-data_size = the_size - 28 - length(filename);
+%Header
+%data_size = the_size - 28 - length(filename);
+%No Header
+data_size = the_size 
 sample_number = floor(data_size/(131-55)) - 1;
 
 %Opens selected file
@@ -70,9 +73,9 @@ fileID = fopen(file);
 %slength = 251680;
 slength = sample_number;
 
-% Skips over header info
-HeaderX = fgetl(fileID);
-header = fread(fileID,28,'uint8=>char*1');
+% Skips over header info (comment out if no header)
+%HeaderX = fgetl(fileID);
+%header = fread(fileID,28,'uint8=>char*1');
 
 
 

@@ -12,16 +12,29 @@ switch cmd
     
     case 'Start'
         % Enables Wifi Streaming
-        write(s,"1m",'string');
+        write(s,"1m",'string'); %works here without '1es'
         write(s,3,'uint8');
-        write(s,"1es",'string');
-        write(s,"1du",'string');
-        write(s,"1ew",'string');
-        write(s,"1w",'string');
-        write(s,1,'uint8');
+        %%%%%%%%% LEFT GLOVE ERROR %%%%%%%%%%
+        %The below line causes the left glove to not stream
+        write(s,"1es",'string'); %SD CARD COMMAND
+        
+        if ~strcmp(port.Port,"COM4")
+            write(s,"1du",'string');
+            write(s,"1ew",'string');
+            write(s,"1w",'string');
+            write(s,1,'uint8');
+        else
+            writeCmd(s,'1eu','');%works here without '1es'
+            writeCmd(s,'1dw','');%works here without '1es'
+            writeCmd(s,'1u','');
+            
+            
+        end
+            
+   %Hypothesis is SD card commands brick left glove
         write(s,"1s",'string');
         write(s,1,'uint8');
-        write(s,"1A",'string');   
+        write(s,"1A",'string');   %try here next
         binFile = strcat(PID, "_", string(datetime('now','Format','yyyy_MM_dd_HH_mm_ss')));
         write(s,binFile,'string'); 
         pause(1)
@@ -30,7 +43,7 @@ switch cmd
         pause(3);
         write(s,1,'uint8');
         pause(1);
-        
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     
 
         write(s,"1ts",'string');
 
@@ -158,9 +171,13 @@ switch cmd
         
         cd ../../patients/
         cd(PID)
-        cd('Uncalibrated Data');        
+        cd('Uncalibrated Data');   
+        
         save(backup, 'rawData', 'data_time','time_stamped');
         cd(curr_dir);
+        if isempty(rawData)
+            error("Last Saved File contained No Data");
+        end
         
     case 'Toss'
         time_stamped = datestr(now,'HH:MM:SS');

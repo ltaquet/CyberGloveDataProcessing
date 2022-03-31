@@ -19,8 +19,10 @@ if ~exist(PID, 'dir')
     mkdir('cal');
     mkdir('Calibrated Data');
     mkdir('Uncalibrated Data');
+    mkdir('EEG');
 else
     fprintf('This patient already exists\n');
+    return
 end
 
 %Return to starting directory

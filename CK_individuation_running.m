@@ -328,5 +328,5 @@ title(strcat(PID,'___',trial_name));
 xlabel('Number of Movements');
 ylabel('CK Equation Average');
 ylim([0.4 1]);
-xlim([3 20]);
+xlim([3 10]);
 legend('Thumb','Index','Middle','Ring','Pinky','Location','southeast');

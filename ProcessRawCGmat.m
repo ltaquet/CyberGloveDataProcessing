@@ -1,4 +1,4 @@
- clear; clc;
+clear; clc;
  
  
 %Set current directory as location of this script
@@ -36,16 +36,25 @@ load(strcat(PID,'_cal.mat'));
 cd ../'Uncalibrated Data'
 
 %Report the number of uncalibrated files for the PID
-filetype = strcat(PID,'_raw_','*.mat');
+filetype = strcat(PID,'*.mat');
 unprocessed_files = dir(filetype);
 fprintf("There are ");
 fprintf(num2str(length(unprocessed_files)));
 fprintf(" file(s) of unprocessed data\n");
 
 %Asks the user for the task names for the unprocessed files and processed
-%file Trial folder
-allTasks = input("List task names deliminated by a comma and a space (i.e task1, task2, task3): ",'s');
+%file Trial folder (COMMENT OUT FOR INTRAOP)
+%allTasks = input("List task names deliminated by a comma and a space (i.e task1, task2, task3): ",'s');
+%task_names = split(allTasks,', ');
+
+%Intraop Task Names
+allTasks = strcat('nIndex1, nIndex2, nHOC1, nHOC2, nMVC1, nMVC2, nPinch1, nPinch2, ', ...
+                  ' 60Index1, 60Index2, 60HOC1, 60HOC2, 60MVC1, 60MVC2, 60Pinch1, 60Pinch2, ', ...
+                  ' 30Index1, 30Index2, 30HOC1, 30HOC2, 30MVC1, 30MVC2, 30Pinch1, 30Pinch2, ', ...
+                  ' 10Index1, 10Index2, 10HOC1, 10HOC2, 10MVC1, 10MVC2, 10Pinch1, 10Pinch2, ', ...
+                  ' 100Index1, 100Index2, 100HOC1, 100HOC2, 100MVC1');                       
 task_names = split(allTasks,', ');
+
 trial_name = input("Overal Trial Name: ",'s');
 mkdir(strcat(trial_name,'_raw'));
 
@@ -88,7 +97,7 @@ end
      cd(trial_name);
   
      %Saves newly calibrated task into the calibrated trial folder
-     save(strcat(PID,'_',task_names{index},'.mat'), 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time');
+     save(unprocessed_files(index).name, 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time');
      
      %Return to directory of other unprocessed files
      cd ../../'Uncalibrated Data'
