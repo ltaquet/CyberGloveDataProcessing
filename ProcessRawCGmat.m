@@ -59,14 +59,14 @@ trial_name = input("Overal Trial Name: ",'s');
 mkdir(strcat(trial_name,'_raw'));
 
 %Catches if not enough trial names given
-if length(task_names) ~= length(unprocessed_files)
-   fprintf("Given number of task names does not equal the ");
-   fprintf(num2str(length(unprocessed_files)));
-   fprintf(" file(s) of unprocessed data\n");
-   fprintf("CHECK THAT YOU LISTED TASKS WITH BOTH A COMMA THEN A SPACE (i.e task1, task2, task3)\n");
-   cd(curr_dir)
-   return 
-end
+% if length(task_names) ~= length(unprocessed_files)
+%    fprintf("Given number of task names does not equal the ");
+%    fprintf(num2str(length(unprocessed_files)));
+%    fprintf(" file(s) of unprocessed data\n");
+%    fprintf("CHECK THAT YOU LISTED TASKS WITH BOTH A COMMA THEN A SPACE (i.e task1, task2, task3)\n");
+%    cd(curr_dir)
+%    return 
+% end
 
 %Processing Loop for all the unproccesed file 
  for index = 1:1:length(unprocessed_files)
@@ -97,7 +97,7 @@ end
      cd(trial_name);
   
      %Saves newly calibrated task into the calibrated trial folder
-     save(unprocessed_files(index).name, 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time');
+     save(unprocessed_files(index).name, 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time','skipped');
      
      %Return to directory of other unprocessed files
      cd ../../'Uncalibrated Data'

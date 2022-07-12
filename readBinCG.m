@@ -89,6 +89,7 @@ s.dir = dir(file);
 
 filesize = s.dir.bytes;
 rawData = zeros(ceil(filesize*0.0169), 23);
+slength = ceil(filesize*0.0169);
 data_time = strings(1,slength);
 %dataRow = zeros(1,22);
 
@@ -96,8 +97,10 @@ data_time = strings(1,slength);
 % Pulls each sample from binary CG file until end of file 
 tic
 sampleIndex = 1;
-for sampleCount = 1:1:slength
-    
+fread(fileID,3,'*char')
+sampleCount = 0;
+while ~feof(fileID)
+    sampleCount = sampleCount +1;
     %There are 22 sensors with 2 bytes of data and 12 significant bits
     
     time = fread(fileID,14,'*char');

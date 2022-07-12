@@ -143,21 +143,21 @@ if skeletonFromPose
     ];
 
   % draw coordinate systems
-  for j=1:skeleton.numberofjoints
-    lx(1) = pose(1,j);%skeleton.joints(j).position(1);
-    ly(1) = pose(2,j);%skeleton.joints(j).position(2);
-    lz(1) = pose(3,j);%skeleton.joints(j).position(3);
-    for k=1:3
-      color = axiscolor(4,:);
-      %if (skeleton.joints(j).dof(k))
-        color = axiscolor(k,:);
-      %end
-      lx(2) = lx(1)+coordsys{j}(1,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(1,k)*10;
-      ly(2) = ly(1)+coordsys{j}(2,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(2,k)*10;
-      lz(2) = lz(1)+coordsys{j}(3,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(3,k)*10;
-      line(lx, ly, lz, 'LineWidth', linewidth+1, 'Color', color);
-    end
-  end % end for
+%   for j=1:skeleton.numberofjoints
+%     lx(1) = pose(1,j);%skeleton.joints(j).position(1);
+%     ly(1) = pose(2,j);%skeleton.joints(j).position(2);
+%     lz(1) = pose(3,j);%skeleton.joints(j).position(3);
+%     for k=1:3
+%       color = axiscolor(4,:);
+%       %if (skeleton.joints(j).dof(k))
+%         color = axiscolor(k,:);
+%       %end
+%       lx(2) = lx(1)+coordsys{j}(1,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(1,k)*10;
+%       ly(2) = ly(1)+coordsys{j}(2,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(2,k)*10;
+%       lz(2) = lz(1)+coordsys{j}(3,k)*10;%posx(1)+skeleton.joints(j).localcoordinatesystem(3,k)*10;
+%       line(lx, ly, lz, 'LineWidth', linewidth+1, 'Color', color);
+%     end
+%   end % end for
   
 else 
   %%%%% skeleton from frame %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

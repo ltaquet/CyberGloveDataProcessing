@@ -1,5 +1,5 @@
 
-function fig = animate ( g_skeleton, g_motion, numloops )
+function fig = animate_single ( g_skeleton, g_motion, numloops )
 %
 % Animate skeleton according to a motion. Uses a timer function.
 %
@@ -145,6 +145,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% update skeleton line setup for each frame
   function animate_updateFrame_local 
+      %Change to desired movie file name
+      writerObj = VideoWriter('test.avi');
+      writerObj.FrameRate = 90;
+      
+      open(writerObj);
     frame = mod(g_frame-1, g_motion.numberofframes)+1;
     skelcolor = GLOBAL_VARS_ANIMATE.skelcolor(frame,:);
     for p=1:g_npaths
@@ -163,7 +168,12 @@ end
         g_lx(1) = g_lx(2);
         g_ly(1) = g_ly(2);
         g_lz(1) = g_lz(2);
+        %% SAVE FIGURE FRAME
+        frame = getframe(gcf);
+        writeVideo(writerObj, frame);
+        %%
       end
+      close(writerObj);
       % end point of last line 
       g_lx(2) = g_motion.jointtrajectories{currpath(nlines+1)}(1,frame);
       g_ly(2) = g_motion.jointtrajectories{currpath(nlines+1)}(2,frame);

@@ -1,3 +1,5 @@
+%% PID
+
 clear; clc;
  
  
@@ -27,40 +29,27 @@ if PID == "New Patient"
     return
 end
 
-cd(PID);
+%% Go to PID raw data dir
 
+cd(PID);
 cd('Raw Data');
 
-%Report the number of uncalibrated files for the PID
+%% Check number of files & Move Log file into Log folder
 filetype = strcat(PID,'*');
 unprocessed_files = dir(filetype);
-fprintf("There are ");
-fprintf(num2str(length(unprocessed_files)));
-fprintf(" file(s) of unprocessed data\n");
 
-%Asks the user for the task names for the unprocessed files and processed
-%file Trial folder
-allTasks = strcat('nIndex1, nIndex2, nHOC1, nHOC2, nMVC1, nMVC2, nPinch1, nPinch2, ', ...
-                  ' 60Index1, 60Index2, 60HOC1, 60HOC2, 60MVC1, 60MVC2, 60Pinch1, 60Pinch2, ', ...
-                  ' 30Index1, 30Index2, 30HOC1, 30HOC2, 30MVC1, 30MVC2, 30Pinch1, 30Pinch2, ', ...
-                  ' 10Index1, 10Index2, 10HOC1, 10HOC2, 10MVC1, 10MVC2, 10Pinch1, 10Pinch2, ', ...
-                  ' 100Index1, 100Index2, 100HOC1, 100HOC2, 100MVC1'); 
-                  
-    
-task_names = split(allTasks,', ');
+if length(unprocessed_files) ~= 31
+   error("More or Less than 30 Files + Log Detected!") 
+end
+
+movefile('*_Log','Logs');
+
+
+%% Call bin loop rasp without PID prompt
+
 trial_name = input("Overal Trial Name: ",'s');
 mkdir(strcat(trial_name,'_bin'));
-
-%Catches if not enough trial names given
-% if length(task_names) ~= length(unprocessed_files)
-%    fprintf("Given number of task names does not equal the ");
-%    fprintf(num2str(length(unprocessed_files)));
-%    fprintf(" file(s) of unprocessed data\n");
-%    fprintf("CHECK THAT YOU LISTED TASKS WITH BOTH A COMMA THEN A SPACE (i.e task1, task2, task3)\n");
-%    cd(curr_dir)
-%    return 
-% end
-
+unprocessed_files = dir(filetype);
 %Processing Loop for all the unproccesed file 
  for index = 1:1:length(unprocessed_files)
      
@@ -113,9 +102,11 @@ mkdir(strcat(trial_name,'_bin'));
      % Pulls each sample from binary CG file until end of file
      tic
      sampleIndex = 1;
-     fread(fileID,1,'*char')
-     for sampleCount = 1:1:slength
-         
+     fread(fileID,3,'*char')
+     sampleCount = 0;
+     skipped = 0;
+     while ~feof(fileID)
+         sampleCount = sampleCount + 1;
          %There are 22 sensors with 2 bytes of data and 12 significant bits
          
          time = fread(fileID,14,'*char');
@@ -125,9 +116,9 @@ mkdir(strcat(trial_name,'_bin'));
          while ~isCG_timestamp(time)
              sampleCount;
              [~,time] = Jump2ValidDataLine_binFile(fileID);
-             
+             skipped = skipped + 2;
              time;
-             pause(2);
+             
              %error('Error: Dang...');
          end
          timestamp1 = time(4:(end-6));
@@ -145,14 +136,19 @@ mkdir(strcat(trial_name,'_bin'));
                  sample = 0;
              end
              
-             
-             dataRow(1,i) = sample;
-             
+            try  
+                dataRow(1,i) = sample;
+            catch
+                sampleCount = sampleCount - 1;
+                break
+            end
          end
          
          %rawData = [rawData; dataRow];
+         
          rawData(sampleCount,:) = dataRow;
          
+            
          %[~, fullTS] = retrieve_CGtimestamp(time);
          data_time(sampleCount) = time;
          
@@ -170,7 +166,7 @@ mkdir(strcat(trial_name,'_bin'));
   
      %Saves newly calibrated task into the calibrated trial folder
 %      save(strcat(unprocessed_files(index).name,'_',task_names{index},'.mat'), 'rawData', 'data_time');
-     save(strcat(unprocessed_files(index).name,'unp','.mat'), 'rawData', 'data_time');
+     save(strcat(unprocessed_files(index).name,'unp','.mat'), 'rawData', 'data_time', 'skipped');
 
      %Return to directory of other unprocessed files
      cd ../'Raw Data'
@@ -185,3 +181,84 @@ mkdir(strcat(trial_name,'_bin'));
 %Return to the startinf directory 
 cd(curr_dir);
 
+%% Call ProcessRawCGmat without PID prompt
+
+clearvars -except PID trial_name curr_dir
+
+%Set current directory as location of this script
+cd(fileparts(which('ProcessRoboData.m')));
+addpath('Functions');
+
+cd(strcat("../../Patients/",PID));
+
+cd cal
+
+%Loads CG MATLAB Calibration file for the PID
+load(strcat(PID,'_cal.mat'));
+cd ../'Uncalibrated Data'
+
+%Report the number of uncalibrated files for the PID
+filetype = strcat(PID,'*.mat');
+unprocessed_files = dir(filetype);
+fprintf("There are ");
+fprintf(num2str(length(unprocessed_files)));
+fprintf(" file(s) of unprocessed data\n");
+
+%Asks the user for the task names for the unprocessed files and processed
+%file Trial folder (COMMENT OUT FOR INTRAOP)
+%allTasks = input("List task names deliminated by a comma and a space (i.e task1, task2, task3): ",'s');
+%task_names = split(allTasks,', ');
+
+%Intraop Task Names
+
+mkdir(strcat(trial_name,'_raw'));
+
+%Catches if not enough trial names given
+% if length(task_names) ~= length(unprocessed_files)
+%    fprintf("Given number of task names does not equal the ");
+%    fprintf(num2str(length(unprocessed_files)));
+%    fprintf(" file(s) of unprocessed data\n");
+%    fprintf("CHECK THAT YOU LISTED TASKS WITH BOTH A COMMA THEN A SPACE (i.e task1, task2, task3)\n");
+%    cd(curr_dir)
+%    return 
+% end
+
+%Processing Loop for all the unproccesed file 
+ for index = 1:1:length(unprocessed_files)
+     
+     %Load files
+     load(unprocessed_files(index).name); 
+     
+     %Move newly processed raw files into raw trial subdirectory 
+     movefile(unprocessed_files(index).name,strcat(trial_name,'_raw'));
+     
+     %Saves current directory location
+     here = pwd;
+     
+     %Return to starting directory
+     cd(curr_dir);
+     
+     %Calibrates currently loaded unprocessed data
+     [angles,angles_deg,angles_f,angles_deg_f] = calibrateCGdata(rawData,offsets,gains,90);
+     
+     %Return to PID directory
+     cd(here);
+     
+     %Makes a directory for PID's calibrated trial data 
+     cd ../'Calibrated Data'
+     if ~exist(trial_name,'dir')
+        mkdir(trial_name);
+     end
+     cd(trial_name);
+  
+     %Saves newly calibrated task into the calibrated trial folder
+     save(unprocessed_files(index).name, 'angles', 'rawData', 'angles_deg','angles_f','angles_deg_f', 'data_time','skipped');
+     
+     %Return to directory of other unprocessed files
+     cd ../../'Uncalibrated Data'
+      
+ end
+
+%Return to the startinf directory 
+cd(curr_dir);
+ 

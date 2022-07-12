@@ -113,9 +113,11 @@ mkdir(strcat(trial_name,'_bin'));
      % Pulls each sample from binary CG file until end of file
      tic
      sampleIndex = 1;
-     fread(fileID,1,'*char')
-     for sampleCount = 1:1:slength
-         
+     fread(fileID,3,'*char')
+     sampleCount = 0;
+     skipped = 0;
+     while ~feof(fileID)
+         sampleCount = sampleCount + 1;
          %There are 22 sensors with 2 bytes of data and 12 significant bits
          
          time = fread(fileID,14,'*char');
@@ -125,9 +127,9 @@ mkdir(strcat(trial_name,'_bin'));
          while ~isCG_timestamp(time)
              sampleCount;
              [~,time] = Jump2ValidDataLine_binFile(fileID);
-             
+             skipped = skipped + 2;
              time;
-             pause(2);
+             
              %error('Error: Dang...');
          end
          timestamp1 = time(4:(end-6));
@@ -145,14 +147,19 @@ mkdir(strcat(trial_name,'_bin'));
                  sample = 0;
              end
              
-             
-             dataRow(1,i) = sample;
-             
+            try  
+                dataRow(1,i) = sample;
+            catch
+                sampleCount = sampleCount - 1;
+                break
+            end
          end
          
          %rawData = [rawData; dataRow];
+         
          rawData(sampleCount,:) = dataRow;
          
+            
          %[~, fullTS] = retrieve_CGtimestamp(time);
          data_time(sampleCount) = time;
          
@@ -170,7 +177,7 @@ mkdir(strcat(trial_name,'_bin'));
   
      %Saves newly calibrated task into the calibrated trial folder
 %      save(strcat(unprocessed_files(index).name,'_',task_names{index},'.mat'), 'rawData', 'data_time');
-     save(strcat(unprocessed_files(index).name,'unp','.mat'), 'rawData', 'data_time');
+     save(strcat(unprocessed_files(index).name,'unp','.mat'), 'rawData', 'data_time', 'skipped');
 
      %Return to directory of other unprocessed files
      cd ../'Raw Data'
